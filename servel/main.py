@@ -69,7 +69,7 @@ class Servel:
 
     def new_subscriber(self, subscriptor: str) -> None:
         with self.lock:
-            ruta_archivo = os.path.join(self.ruta_subscriptores, subscriptor)
+            ruta_archivo = os.path.join(self.ruta_subscriptores, f"{subscriptor}.txt")
             if os.path.exists(ruta_archivo):
                 os.remove(ruta_archivo)
             with open(ruta_archivo, "w", encoding="utf-8") as archivo:
@@ -93,7 +93,7 @@ class Servel:
     def publicar_evento(self, sucursal: str, id_votante: str, evento: str) -> None:
         with self.lock:
             nombre_completo = self.nombres_votantes.get(str(id_votante), "Desconocido")
-            linea_notificacion = f"{sucursal};{evento};{nombre_completo}\n"
+            linea_notificacion = f"{sucursal};{nombre_completo};{evento}\n"
             for subscriptor, filtros in self.suscriptores.items():
                 notificar = False
                 for filtro_sucursal, filtro_evento in filtros:
@@ -103,7 +103,7 @@ class Servel:
                         notificar = True
                         break
                 if notificar:
-                    ruta_archivo = os.path.join(self.ruta_subscriptores, subscriptor)
+                    ruta_archivo = os.path.join(self.ruta_subscriptores, f"{subscriptor}.txt")
                     with open(ruta_archivo, "a", encoding="utf-8") as archivo:
                         archivo.write(linea_notificacion)
 
