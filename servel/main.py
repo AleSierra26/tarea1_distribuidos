@@ -90,12 +90,10 @@ class Servel:
                 if filtro in self.suscriptores[subscriptor]:
                     self.suscriptores[subscriptor].remove(filtro)
                     
-    def publicar_evento(self, sucursal: str, id_votante: str, evento: str,
-                        id_votacion: str) -> None:
+    def publicar_evento(self, sucursal: str, id_votante: str, evento: str) -> None:
         with self.lock:
             nombre_completo = self.nombres_votantes.get(str(id_votante), "Desconocido")
-            tema_o_id = self.config["temas_votaciones"].get(id_votacion, id_votacion)
-            linea_notificacion = f"{sucursal};{tema_o_id};{evento};{nombre_completo}\n"
+            linea_notificacion = f"{sucursal};{evento};{nombre_completo}\n"
             for subscriptor, filtros in self.suscriptores.items():
                 notificar = False
                 for filtro_sucursal, filtro_evento in filtros:

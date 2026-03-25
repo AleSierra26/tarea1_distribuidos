@@ -46,11 +46,11 @@ class Sucursal:
     ) -> None:
         with self.lock:
             if not self.operativa:
-                self.servel.publicar_evento(self.nombre, id_votante, "Cerrado", id_votacion)
+                self.servel.publicar_evento(self.nombre, id_votante, "Cerrado")
                 return
 
             if id_votacion not in self.config_votaciones:
-                self.servel.publicar_evento(self.nombre, id_votante, "No existe", id_votacion)
+                self.servel.publicar_evento(self.nombre, id_votante, "No existe")
                 return
 
             es_corrupto = "Corrupto" in estados
@@ -62,16 +62,15 @@ class Sucursal:
             ya_voto = id_votante in self.participantes.get(id_votacion, set())
 
             if not tiene_documentos and not es_corrupto:
-                self.servel.publicar_evento(self.nombre, id_votante, "Indocumentado", id_votacion)
+                self.servel.publicar_evento(self.nombre, id_votante, "Indocumentado")
                 return
 
             if not inscrito_aqui and not es_mov_reducida:
-                self.servel.publicar_evento(self.nombre, id_votante, "Sucursal incorrecta",
-                                            id_votacion)
+                self.servel.publicar_evento(self.nombre, id_votante, "Sucursal incorrecta")
                 return
 
             if ya_voto and not es_corrupto:
-                self.servel.publicar_evento(self.nombre, id_votante, "Repetido", id_votacion)
+                self.servel.publicar_evento(self.nombre, id_votante, "Repetido")
                 return
 
             self._procesar_voto(id_votante, id_votacion, preferencias, estados)
