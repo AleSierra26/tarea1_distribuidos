@@ -12,9 +12,9 @@ class Sucursal:
         self.servel = ServerProxy(f"http://127.0.0.1:{puerto_servel}", allow_none=True)
         self.operativa = True
         self.lock = threading.Lock()
-        self.config_votaciones = {} 
+        self.config_votaciones = {}
         self.opciones_votaciones = {}
-        self.habilitados = {} 
+        self.habilitados = {}
         self.votos_locales = {}
         self.participantes = {}
 
@@ -34,7 +34,6 @@ class Sucursal:
         with self.lock:
             if not self.operativa:
                 return
-
             if self.votos_locales:
                 self.servel.recibir_votos(self.nombre, self.votos_locales)
                 self.votos_locales = {}
@@ -67,7 +66,8 @@ class Sucursal:
                 return
 
             if not inscrito_aqui and not es_mov_reducida:
-                self.servel.publicar_evento(self.nombre, id_votante, "Sucursal incorrecta", id_votacion)
+                self.servel.publicar_evento(self.nombre, id_votante, "Sucursal incorrecta",
+                                            id_votacion)
                 return
 
             if ya_voto and not es_corrupto:
@@ -76,13 +76,16 @@ class Sucursal:
 
             self._procesar_voto(id_votante, id_votacion, preferencias, estados)
 
-    def _procesar_voto(self, id_votante: str, id_votacion: str, preferencias: List[str], estados: List[str]) -> None:
+    def _procesar_voto(self, id_votante: str, id_votacion: str, preferencias: List[str],
+                       estados: List[str]) -> None:
         opciones_validas_votacion = self.opciones_votaciones.get(id_votacion, [])
         voto_final = None
         if "Negacionista" in estados:
-            opciones_candidatas = [o for o in opciones_validas_votacion if o not in preferencias]
+            opciones_candidatas = [opcion for opcion in opciones_validas_votacion
+                                   if opcion not in preferencias]
         else:
-            opciones_candidatas = [o for o in opciones_validas_votacion if o in preferencias]
+            opciones_candidatas = [opcion for opcion in opciones_validas_votacion
+                                   if opcion in preferencias]
         if len(opciones_candidatas) == 0:
             voto_final = "Blanco"
         elif len(opciones_candidatas) == 1:
