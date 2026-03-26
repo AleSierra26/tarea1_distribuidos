@@ -135,3 +135,9 @@ self.lock = threading.RLock()
 - Usa with self.lock: siempre que puedas
 
 Si quieres, puedo ver tu código (como ese del RPC que estás haciendo) y decirte exactamente dónde deberías poner locks 👀
+
+---
+
+## Nota Adicional
+
+- Al desarrollar el codigo fuimos asistidos por los sistemas de autocompletado de Copilot y las distintas extensiones incorporadas en VSCode
